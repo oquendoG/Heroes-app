@@ -1,0 +1,17 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\src",
+    "\\src\\app",
+    "\\src\\app\\heroes",
+    "\\src\\app\\heroes\\components",
+    "\\src\\app\\heroes\\components\\card",
+    "\\src\\app\\heroes\\components\\confirm-dialog",
+    "\\src\\app\\heroes\\interfaces",
+    "\\src\\app\\heroes\\pages",
+    "\\src\\app\\heroes\\pages\\new-page",
+    "\\src\\app\\heroes\\services"
+  ],
+  "SelectedNode": "\\package.json",
+  "PreviewInSolutionExplorer": false
+}

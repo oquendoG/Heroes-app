@@ -13,7 +13,8 @@ export class HeroesService {
   constructor(private httpClient: HttpClient) { }
 
   public getHeroes(): Observable<Hero[]> {
-    return this.httpClient.get<Hero[]>(`${this.baseUrl}/heroes`);
+    let heroes: Observable<Hero[]> = this.httpClient.get<Hero[]>(`${this.baseUrl}/heroes`);
+    return heroes;
   }
 
   public getById(id: string): Observable<Hero | undefined>{
