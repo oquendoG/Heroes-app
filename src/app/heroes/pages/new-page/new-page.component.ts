@@ -11,12 +11,34 @@ import { Hero, Publisher } from '../../interfaces/hero.interface';
 import { HeroesService } from '../../services/heroes.service';
 import { ConfirmDialogComponent } from '../../components/confirm-dialog/confirm-dialog.component';
 
+type InternalPublisher = {id: string, desc: string};
+
 @Component({
   selector: 'app-new-page',
   templateUrl: './new-page.component.html',
   styles: ``,
 })
 export class NewPageComponent implements OnInit {
+  public publishers: InternalPublisher[] = [
+    { id: 'DC Comics', desc: 'DC - Comics' },
+    { id: 'Marvel Comics', desc: 'Marvel - Comics' },
+  ];
+
+  public heroForm: FormGroup = new FormGroup({
+    id: new FormControl<string>(''),
+    superhero: new FormControl<string>('', { nonNullable: true }),
+    publisher: new FormControl<Publisher>(Publisher.DCComics),
+    alter_ego: new FormControl(''),
+    first_appearance: new FormControl(''),
+    characters: new FormControl(''),
+    alt_img: new FormControl(''),
+  });
+
+  public get currentHero(): Hero {
+    const hero: Hero = this.heroForm.value as Hero;
+    return hero;
+  }
+
   constructor(
     private heroesService: HeroesService,
     private ActivatedRoute: ActivatedRoute,
@@ -34,26 +56,6 @@ export class NewPageComponent implements OnInit {
         this.heroForm.reset(hero);
         return;
       });
-  }
-
-  public heroForm: FormGroup = new FormGroup({
-    id: new FormControl<string>(''),
-    superhero: new FormControl<string>('', { nonNullable: true }),
-    publisher: new FormControl<Publisher>(Publisher.DCComics),
-    alter_ego: new FormControl(''),
-    first_appearance: new FormControl(''),
-    characters: new FormControl(''),
-    alt_img: new FormControl(''),
-  });
-
-  public publishers = [
-    { id: 'DC Comics', desc: 'DC - Comics' },
-    { id: 'Marvel Comics', desc: 'Marvel - Comics' },
-  ];
-
-  public get currentHero(): Hero {
-    const hero = this.heroForm.value as Hero;
-    return hero;
   }
 
   public onSubmit(): void {
@@ -86,13 +88,15 @@ export class NewPageComponent implements OnInit {
       data: this.heroForm.value,
     });
 
-    dialogRef.afterClosed().pipe(
-      filter((result: boolean) => result),
-      switchMap(() => this.heroesService.deleteHerobyId(this.currentHero.id)),
-      filter((wasdeleted: boolean) => wasdeleted)
-    )
-    .subscribe(() => {
-      this.router.navigate(['/heroes'])
-    })
+    dialogRef
+      .afterClosed()
+      .pipe(
+        filter((result: boolean) => result),
+        switchMap(() => this.heroesService.deleteHerobyId(this.currentHero.id)),
+        filter((wasdeleted: boolean) => wasdeleted)
+      )
+      .subscribe(() => {
+        this.router.navigate(['/heroes']);
+      });
   }
 }
